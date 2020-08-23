@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="WebRTC Example">
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+    <meta itemprop="description" content="Client-side WebRTC Example">
+    <meta itemprop="image" content="img/logo.png">
+    <meta itemprop="name" content="WebRTC Example">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta id="theme-color" name="theme-color" content="#0a0c0e">
+    <base target="_blank">
+    <title>WebRecord</title>
+    <link rel="icon" sizes="192x192" href="img/logo.png">
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.7.3/tailwind.min.css' />
+    <link rel="stylesheet" href="css/main.css">
+    <style>
+        #gum,#recorded {
+            height: 50vh;
+        }
+
+        button {
+            background: rgb(244, 0, 0);
+            background: linear-gradient(187deg, rgba(244, 0, 0, 1) 0%, rgba(146, 0, 0, 1) 100%);
+        }
+
+        button:hover {
+            box-shadow: 0 0 0 0 rgba(244, 0, 0, 1), 0.2rem 0.2rem 60px rgba(146, 0, 0, 1);
+        }
+
+        button {
+            width: 55px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="h-screen flex justify-center items-center">
+        <div class="container mx-auto max-w-md rounded-lg overflow-hidden my-2 bg-white bg-gray-900 shadow-2xl">
+            <div class="relative mb-6">
+                <video class="w-full" id="gum" playsinline autoplay muted></video>
+                <video class="w-full" id="recorded" playsinline></video>
+                <div class="text-center absolute w-full" style="bottom: -30px">
+                    <div class="mb-5">
+                        <p class="text-white tracking-wide uppercase text-lg font-bold"
+                            style="text-shadow:0px 1px 10px #000">Video</p>
+                    </div>
+                    <button id="start" class="p-4 rounded-full transition ease-in duration-200 focus:outline-none">
+                        <svg class="m-auto power" xmlns="http://www.w3.org/2000/svg"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 15 15"
+                            width="15pt" height="15pt">
+                            <g>
+                                <path
+                                    d=" M -1.416 -1.416 L 16.416 -1.416 L 16.416 16.416 L -1.416 16.416 L -1.416 -1.416 Z "
+                                    fill="none" />
+                                <path
+                                    d=" M 8.243 0.813 L 6.757 0.813 L 6.757 8.243 L 8.243 8.243 L 8.243 0.813 Z  M 11.832 2.425 L 10.777 3.48 C 11.996 4.458 12.704 5.937 12.701 7.5 C 12.701 10.376 10.376 12.701 7.5 12.701 C 5.3 12.703 3.338 11.319 2.6 9.246 C 1.863 7.174 2.51 4.861 4.216 3.473 L 3.168 2.425 C 1.673 3.687 0.812 5.544 0.813 7.5 C 0.813 11.193 3.807 14.187 7.5 14.187 C 11.193 14.187 14.187 11.193 14.187 7.5 C 14.187 5.464 13.273 3.651 11.832 2.425 Z "
+                                    fill="rgb(255,255,255)" />
+                            </g>
+                        </svg>
+                    </button>
+                    <span class="btn2">
+                        <button id="stop" class="p-4 rounded-full transition ease-in duration-200 focus:outline-none">
+                            <svg class="m-auto stop" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 15 15"
+                                width="15pt" height="15pt">
+                                <g>
+                                    <path
+                                        d=" M -1.416 -1.416 L 16.416 -1.416 L 16.416 16.416 L -1.416 16.416 L -1.416 -1.416 Z "
+                                        fill="none" />
+                                </g>
+                                <path
+                                    d="M 3.917 0.74 L 11.083 0.74 C 12.836 0.74 14.26 2.164 14.26 3.917 L 14.26 11.083 C 14.26 12.836 12.836 14.26 11.083 14.26 L 3.917 14.26 C 2.164 14.26 0.74 12.836 0.74 11.083 L 0.74 3.917 C 0.74 2.164 2.164 0.74 3.917 0.74 Z"
+                                    style="stroke:none;fill:#FFFFFF;stroke-miterlimit:10;" />
+                            </svg>
+                        </button>
+                    </span>
+                    <span class="btn3">
+                        <button id="record" class="p-4 rounded-full transition ease-in duration-200 focus:outline-none">
+                            <svg class="m-auto record" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 15 15"
+                                width="15pt" height="15pt">
+                                <circle vector-effect="non-scaling-stroke" cx="7.5" cy="7.5" r="7.355516637478109"
+                                    fill="rgb(255,255,255)" /></svg>
+                        </button>
+                    </span>
+                    <span class="btn4">
+                        <button id="play" class="p-4 rounded-full transition ease-in duration-200 focus:outline-none">
+                            <svg class="m-auto" xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink" style="isolation:isolate" viewBox="0 0 15 15"
+                                width="15pt" height="15pt">
+                                <g>
+                                    <path
+                                        d=" M -1.416 -1.416 L 16.416 -1.416 L 16.416 16.416 L -1.416 16.416 L -1.416 -1.416 Z "
+                                        fill="none" />
+                                </g>
+                                <path
+                                    d=" M 13.187 8.355 L 7.934 11.388 L 2.681 14.421 C 1.864 14.893 1.2 14.509 1.2 13.565 L 1.2 7.5 L 1.2 1.435 C 1.2 0.491 1.864 0.107 2.681 0.579 L 7.934 3.612 L 13.187 6.645 C 14.004 7.117 14.004 7.883 13.187 8.355 Z "
+                                    fill="rgb(255,255,255)" />
+                            </svg>
+                        </button>
+                    </span>
+                    <span class="btn5">
+                        <button id="download" class="ml-3 p-4 rounded-full transition ease-in duration-200 focus:outline-none">
+                            <svg class="m-auto" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                style="isolation:isolate" viewBox="0 0 15 15" width="15pt" height="15pt">
+                                <g>
+                                    <path
+                                        d=" M -1.416 -1.416 L 16.416 -1.416 L 16.416 16.416 L -1.416 16.416 L -1.416 -1.416 Z "
+                                        fill="none" />
+                                </g>
+                                <path
+                                    d=" M 6.431 0.552 C 5.523 0.552 4.828 1.247 4.828 2.155 L 4.828 6.431 L 3.057 6.431 C 2.31 6.431 2.201 6.542 2.79 7.183 L 6.331 10.707 C 7.507 11.883 7.494 11.883 8.67 10.707 L 12.21 7.233 C 12.851 6.538 12.638 6.431 11.943 6.431 L 10.172 6.431 L 10.172 2.155 C 10.172 1.247 9.477 0.552 8.569 0.552 L 6.431 0.552 Z  M 0.552 10.707 L 0.552 12.845 C 0.552 13.753 1.247 14.448 2.155 14.448 L 12.845 14.448 C 13.753 14.448 14.448 13.753 14.448 12.845 L 14.448 10.707 L 13.379 10.707 L 13.379 12.845 C 13.379 13.166 13.166 13.379 12.845 13.379 L 2.155 13.379 C 1.834 13.379 1.621 13.166 1.621 12.845 L 1.621 10.707 L 0.552 10.707 Z "
+                                    fill="rgb(255,255,255)" />
+                            </svg>
+                        </button>
+                    </span>
+                </div>
+            </div>
+            <div class="py-10 px-6 text-center tracking-wide grid grid-cols-3 gap-6">
+                <div class="posts">
+                    <p class="text-lg text-white">324</p>
+                    <p class="text-gray-200 text-sm">Posts</p>
+                </div>
+                <div class="followers">
+                    <p class="text-lg text-white">7542</p>
+                    <p class="text-gray-200 text-sm">Followers</p>
+                </div>
+                <div class="following">
+                    <p class="text-lg text-white">295</p>
+                    <p class="text-gray-200 text-sm">Following</p>
+                </div>
+            </div>
+            <div class="group inline-block min-w-full">
+                <button
+                    class="outline-none focus:outline-none border px-3 py-1 bg-white rounded-sm flex items-center min-w-full">
+                    <span class="pr-1 font-semibold flex-1">Dropdown</span>
+                    <span>
+                        <svg class="fill-current h-4 w-4 transform group-hover:-rotate-180 transition duration-150 ease-in-out"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                        </svg>
+                    </span>
+                </button>
+                <ul
+                    class="bg-white border rounded-sm transform scale-0 group-hover:scale-100 absolute transition duration-150 ease-in-out origin-top min-w-32">
+                    <li class="rounded-sm px-3 py-1 hover:bg-gray-100">Play Video</li>
+                    <li class="rounded-sm px-3 py-1 hover:bg-gray-100">Download</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <input type="checkbox" id="echoCancellation">
+
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <script src="js/main.js" async></script>
+
+</body>
+
+</html>
+<!--
+ *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
+ *
+ *  Use of this source code is governed by a BSD-style license
+ *  that can be found in the LICENSE file in the root of the source
+ *  tree.
+-->
